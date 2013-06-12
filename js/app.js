@@ -1,7 +1,6 @@
 // instantiate an app variable for our application from angular
 var app = angular.module("app", [])
 
-
 // configure the app object by adding routes
 app.config(function($routeProvider) {
 
@@ -21,19 +20,35 @@ app.config(function($routeProvider) {
 });
 
 // create a logincontroler and create a single method for it.
-app.controller("LoginController", function($scope, $location ) {
+app.controller("LoginController", function($scope, $location, AuthenticationService ) {
+  
+
   $scope.credentials = { username: "test", password: "whatwhat" };
 
   $scope.login = function() {
-      if ($scope.credentials.username === "test") {
-	  $location.path('/home');
-      }
+    AuthenticationService.login($scope.credentials);
   }
 });
 
 // create home controller and a logout method
-app.controller("HomeController", function($scope ) {
+app.controller("HomeController", function($scope, AuthenticationService ) {
     $scope.logout = function() {
+	AuthenticationService.logout();
+    }
+});
+
+
+app.factory("AuthenticationService", function($location) {
+  return {
+    login: function(credentials) {
+      if (credentials.username !== "test" || credentials.password !== "whatwhat") {
+        alert("Username must be 'ralph', password must be 'wiggum'");
+      } else {
+        $location.path('/home');
+      }
+    },
+    logout: function() {
       $location.path('/login');
     }
+  };
 });
