@@ -17,7 +17,7 @@ app.config(function($routeProvider) {
 });
 
 app.controller("LoginController", function($scope, $location ) {
-  $scope.credentials = { username: "", password: "" };
+  $scope.credentials = { username: "test", password: "whatwhat" };
 
   $scope.login = function() {
       if ($scope.credentials.username === "test") {
