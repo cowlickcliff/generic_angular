@@ -23,7 +23,7 @@ app.config(function($routeProvider) {
 app.controller("LoginController", function($scope, $location, AuthenticationService ) {
   
 
-  $scope.credentials = { username: "test", password: "whatwhat" };
+  $scope.credentials = { username: "test", password: "test" };
 
   $scope.login = function() {
       // retrieve the test users from localstorage
