@@ -5,7 +5,7 @@ var app = angular.module("app", [])
 // configure the app object by adding routes
 app.config(function($routeProvider) {
 
-  // Bascially a list of case the URL is... then show template-A and use controller-A...
+  // Bascially a list of cases where if the URL is A then show template-A and use controller-A...
   $routeProvider.when('/login', {
     templateUrl: 'views/login.html',
     controller: 'LoginController'
@@ -25,7 +25,10 @@ app.controller("LoginController", function($scope, $location ) {
   $scope.credentials = { username: "test", password: "whatwhat" };
 
   $scope.login = function() {
-      if ($scope.credentials.username === "test") {
+      // retrieve the test users from localstorage
+      var users = JSON.parse( localStorage.getItem('testUsers') );
+
+      if ($scope.credentials.password === users[$scope.credentials.username]) {
 	  $location.path('/home');
       }
   }

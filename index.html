@@ -4,6 +4,25 @@
   <script src="/js/angular.min.js"></script>
   <script src="/js/app.js"></script>
 
+  <script type="text/javascript">
+
+// username : password
+var testUsers =  {
+    'test'	: 'test',
+    'jack'	: 'jack',
+    'debbie'	: 'debbie',
+    'stan'	: 'stan',
+};
+
+// clear the localstorage
+localStorage.clear();
+
+
+// Put the object into storage
+localStorage.setItem('testUsers', JSON.stringify(testUsers));
+  </script>
+  
+
 </head>
 <body>
 
