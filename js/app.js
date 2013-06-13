@@ -26,16 +26,12 @@ app.controller("LoginController", function($scope, $location, AuthenticationServ
   $scope.credentials = { username: "test", password: "whatwhat" };
 
   $scope.login = function() {
-<<<<<<< HEAD
-    AuthenticationService.login($scope.credentials);
-=======
       // retrieve the test users from localstorage
       var users = JSON.parse( localStorage.getItem('testUsers') );
 
       if ($scope.credentials.password === users[$scope.credentials.username]) {
 	  $location.path('/home');
       }
->>>>>>> aea864f38c4f070d74ea3d7918cde1bdd929740c
   }
 });
 
