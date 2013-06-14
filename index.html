@@ -1,10 +1,17 @@
 <html ng-app="app">
 
 <head>
+  <!-- angular inclusion -->
   <script src="/js/angular.min.js"></script>
+
+  <!-- intro includes -->
   <script src="/js/intro.js"></script>
   <link href="/css/introjs.css" rel="stylesheet">
+
+  <!-- my application --> 
   <script src="/js/app.js"></script>
+
+  <!-- initialize localstorage -->
   <script type="text/javascript">
 // username : password
 var testUsers =  {
@@ -69,7 +76,7 @@ localStorage.setItem('testUsers', JSON.stringify(testUsers));
 <body>
 
   <div class="container" data-intro='Hello step one!' data-step='1'>
-    <div class="span3">
+    <div class="span3" class="form-signin" >
       <h3>Just a little test</h3>
     </div>
   </div>
