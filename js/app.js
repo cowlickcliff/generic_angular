@@ -5,6 +5,11 @@ var app = angular.module("app", [])
 app.config(function($routeProvider) {
 
   // Bascially a list of cases where if the URL is A then show template-A and use controller-A...
+  $routeProvider.when('/choose-user-case', {
+    templateUrl: 'views/choose-user-case.html',
+    controller: 'ChooseUserCaseController'
+  });
+
   $routeProvider.when('/login', {
     templateUrl: 'views/login.html',
     controller: 'LoginController'
@@ -15,9 +20,21 @@ app.config(function($routeProvider) {
     controller: 'HomeController'
   });
 
-  $routeProvider.otherwise({ redirectTo: '/login' });
+  $routeProvider.otherwise({ redirectTo: '/choose-user-case' });
 
 });
+
+
+// create a logincontroler and create a single method for it.
+app.controller("ChooseUserCaseController", function($scope, $location ) {
+
+    $scope.choose = function() {
+	$location.path('/login');
+    }
+});
+
+
+
 
 // create a logincontroler and create a single method for it.
 app.controller("LoginController", function($scope, $location, AuthenticationService ) {
