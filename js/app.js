@@ -29,6 +29,20 @@ app.config(function($routeProvider) {
 app.controller("ChooseUserCaseController", function($scope, $location ) {
 
     $scope.choose = function() {
+	// initialize localstorage
+	var testUsers =  {
+	    'test'	: 'test',
+	    'jack'	: 'jack',
+	    'debbie'	: 'debbie',
+	    'stan'	: 'stan',
+	};
+	
+	// clear the localstorage
+	localStorage.clear();
+
+	// Put the object into storage
+	localStorage.setItem('testUsers', JSON.stringify(testUsers));
+
 	$location.path('/login');
     }
 });
@@ -40,7 +54,8 @@ app.controller("ChooseUserCaseController", function($scope, $location ) {
 app.controller("LoginController", function($scope, $location, AuthenticationService ) {
   
 
-  $scope.credentials = { username: "test", password: "test" };
+  //$scope.credentials = { username: "test", password: "test" };
+  $scope.credentials = { username: "test", password: "test"};
 
   $scope.login = function() {
       // retrieve the test users from localstorage
@@ -61,6 +76,23 @@ app.controller("HomeController", function($scope, AuthenticationService ) {
 
 
 app.factory("AuthenticationService", function($location) {
+  return {
+    login: function(credentials) {
+      if (credentials.username !== "test" || credentials.password !== "whatwhat") {
+        alert("Username must be 'ralph', password must be 'wiggum'");
+      } else {
+        $location.path('/home');
+      }
+    },
+    logout: function() {
+      $location.path('/login');
+    }
+  };
+});
+
+
+
+app.factory("ChooseUserCaseService", function() {
   return {
     login: function(credentials) {
       if (credentials.username !== "test" || credentials.password !== "whatwhat") {
