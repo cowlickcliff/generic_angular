@@ -1,6 +1,5 @@
 // instantiate an app variable for our application from angular
-var app = angular.module("app", ['ui.bootstrap'])
-
+var app = angular.module("app", ['ui.bootstrap']);
 
 // configure the app object by adding routes
 app.config(function($routeProvider) {
@@ -32,11 +31,15 @@ app.factory("DataService", function() {
 
   return {
       setData:function (key, value) {
+	  console.log("setData: " + key + "; value: " + value);
 	  data[key] = value;
       },
-      getData:function () {
+      getData:function (key) {
+	  return data[key];
+      },
+      getAllData:function() {
 	  return data;
-      }
+      },
   };
     });
 
@@ -76,9 +79,7 @@ app.controller("ChooseUserCaseController", function($scope, $location, DataServi
 
 	// Put the object into storage
 	localStorage.setItem('testUsers', JSON.stringify(testUsers));
-
 	console.log("choice: " + $scope.choice);
-
 	DataService.setData('choice', $scope.choice);
 
 	$location.path('/login');
@@ -87,15 +88,18 @@ app.controller("ChooseUserCaseController", function($scope, $location, DataServi
 
 
 
-
 // create a logincontroler and create a single method for it.
-app.controller("LoginController", function($scope, $location, AuthenticationService ) {
-  
-  $scope.credentials = { username: "test", password: "test" };
+app.controller("LoginController", function($scope, $location, AuthenticationService, DataService ) {
+
+  $scope.credentials = { username: DataService.getData("choice"), password: DataService.getData("choice") };
+
+  if (DataService.getData("login") == true ) {
+      $location.path('/home');
+      DataService.setData("showModal", true);
+  }
 
   $scope.login = function() {
       console.log("logging in with username " + $scope.credentials.username);
-
       // retrieve the test users from localstorage
       AuthenticationService.login($scope.credentials);
   }
@@ -112,8 +116,10 @@ app.controller("HomeController", function($scope, AuthenticationService, DataSer
 });
 
 
-app.factory("AuthenticationService", function($location) {
-  var credentials	= {};
+app.factory("AuthenticationService", function($location, DataService) {
+  var credentials	= { 
+      "login" : false,
+  };
   var users		= JSON.parse( localStorage.getItem('testUsers') );
   return {
     login: function(c) {
@@ -124,15 +130,18 @@ app.factory("AuthenticationService", function($location) {
       if ( !(credentials.username in users) || users[ credentials.username ].password !== credentials.password ) {
 	  alert("Either your username or password is incorrect");
       } else {
+
+	DataService.setData('login', true);
         $location.path('/home');
       }
     },
     logout: function() {
+      console.log("final data: " + JSON.stringify(DataService.getAllData()));
       $location.path('/login');
     },
     get: function() { 
-	  console.log("credentials " + JSON.stringify(credentials));
-	  return credentials; 
+      console.log("credentials " + JSON.stringify(credentials));
+	return credentials; 
     }
   };
 });
@@ -147,7 +156,7 @@ function CollapseDemoCtrl($scope) {
 
 
 function CarouselDemoCtrl($scope) {
-    $scope.myInterval = 5000;
+  $scope.myInterval = 5000;
   $scope.slides = [
       {image: 'http://placekitten.com/200/200',text: 'Kitten.'},
       {image: 'http://placekitten.com/225/200',text: 'Kitty!'},
@@ -162,3 +171,29 @@ function CarouselDemoCtrl($scope) {
 	});
     };
 }
+
+var ModalDemoCtrl = function ($scope, DataService) {
+
+    console.log("checking showModal" + DataService.getData("showModal"));
+    if (DataService.getData("showModal") == true) {
+	$scope.shouldBeOpen = true;
+	DataService.setData("showModal", false);
+    }
+
+    $scope.open = function () {
+	$scope.shouldBeOpen = true;
+    };
+
+    $scope.close = function () {
+	$scope.closeMsg = 'I was closed at: ' + new Date();
+	$scope.shouldBeOpen = false;
+    };
+
+    $scope.items = ['item1', 'item2'];
+
+    $scope.opts = {
+	backdropFade: true,
+	dialogFade:true
+    };
+
+};
