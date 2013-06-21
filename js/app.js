@@ -27,18 +27,48 @@ app.config(function($routeProvider) {
 
 
 
+app.factory("DataService", function() {
+  var data	= {};
+
+  return {
+      setData:function (key, value) {
+	  data[key] = value;
+      },
+      getData:function () {
+	  return data;
+      }
+  };
+    });
+
+
 
 
 // create a logincontroler and create a single method for it.
-app.controller("ChooseUserCaseController", function($scope, $location ) {
+app.controller("ChooseUserCaseController", function($scope, $location, DataService) {
 
-    $scope.choose = function() {
+    $scope.submit = function() {
 	// initialize localstorage
 	var testUsers =  {
-	    'test'	: 'test',
-	    'jack'	: 'jack',
-	    'debbie'	: 'debbie',
-	    'stan'	: 'stan',
+	    'test' : {
+		'username' : 'test',
+		'password' : 'test',
+		'appdata'  : [],
+	    },
+	    'jack' : {
+		'username' : 'jack',
+		'password' : 'jack',
+		'appdata'  : [],
+	    },
+	    'debbie' : {
+		'username' : 'debbie',
+		'password' : 'debbie',
+		'appdata'  : [],
+	    },
+	    'stan' : {
+		'username' : 'stan',
+		'password' : 'stan',
+		'appdata'  : [],
+	    },
 	};
 	
 	// clear the localstorage
@@ -46,6 +76,10 @@ app.controller("ChooseUserCaseController", function($scope, $location ) {
 
 	// Put the object into storage
 	localStorage.setItem('testUsers', JSON.stringify(testUsers));
+
+	console.log("choice: " + $scope.choice);
+
+	DataService.setData('choice', $scope.choice);
 
 	$location.path('/login');
     }
@@ -57,65 +91,58 @@ app.controller("ChooseUserCaseController", function($scope, $location ) {
 // create a logincontroler and create a single method for it.
 app.controller("LoginController", function($scope, $location, AuthenticationService ) {
   
-
-  //$scope.credentials = { username: "test", password: "test" };
-  $scope.credentials = { username: "test", password: "test"};
+  $scope.credentials = { username: "test", password: "test" };
 
   $scope.login = function() {
-      // retrieve the test users from localstorage
-      var users = JSON.parse( localStorage.getItem('testUsers') );
+      console.log("logging in with username " + $scope.credentials.username);
 
-      if ($scope.credentials.password === users[$scope.credentials.username]) {
-	  $location.path('/home');
-      }
+      // retrieve the test users from localstorage
+      AuthenticationService.login($scope.credentials);
   }
 });
 
 // create home controller and a logout method
-app.controller("HomeController", function($scope, AuthenticationService ) {
+app.controller("HomeController", function($scope, AuthenticationService, DataService ) {
     $scope.logout = function() {
+	var d = DataService.getData();
+	console.log("saved data " + JSON.stringify(d));
+
 	AuthenticationService.logout();
     }
 });
 
 
 app.factory("AuthenticationService", function($location) {
+  var credentials	= {};
+  var users		= JSON.parse( localStorage.getItem('testUsers') );
   return {
-    login: function(credentials) {
-      if (credentials.username !== "test" || credentials.password !== "whatwhat") {
-        alert("Username must be 'ralph', password must be 'wiggum'");
+    login: function(c) {
+      credentials = c;
+      console.log("credentials " + JSON.stringify(credentials));
+
+      // if the username doesn't exist in the users hash or if the password is wrong, show an alert
+      if ( !(credentials.username in users) || users[ credentials.username ].password !== credentials.password ) {
+	  alert("Either your username or password is incorrect");
       } else {
         $location.path('/home');
       }
     },
     logout: function() {
       $location.path('/login');
-    }
-  };
-});
-
-
-
-app.factory("ChooseUserCaseService", function() {
-  return {
-    login: function(credentials) {
-      if (credentials.username !== "test" || credentials.password !== "whatwhat") {
-        alert("Username must be 'ralph', password must be 'wiggum'");
-      } else {
-        $location.path('/home');
-      }
     },
-    logout: function() {
-      $location.path('/login');
+    get: function() { 
+	  console.log("credentials " + JSON.stringify(credentials));
+	  return credentials; 
     }
   };
 });
+
 
 
 
 /*  Adding some bootstrap stuff */
 function CollapseDemoCtrl($scope) {
-    $scope.isCollapsed = false;
+    $scope.isCollapsed = true;
 }
 
 

@@ -1,3 +1,18 @@
 <h3>Choose your user case</h3>
 
-<a href="" ng-click="choose()">Login</a>
+
+<form ng-submit="submit()">
+  <select ng-model="choice">
+    <option value="test">Test</option>
+    <option value="jack">Jack</option>
+    <option value="debbie">Debbie</option>
+    <option value="stan">Stan</option>
+  </select>
+
+  <h3>{{choice}}</h3>
+
+  <br/>
+  <input type="submit" value="Submit"/>
+</form>
+
+<!-- <a href="" ng-click="choose()">Login</a> -->
