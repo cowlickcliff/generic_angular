@@ -1,5 +1,6 @@
 // instantiate an app variable for our application from angular
-var app = angular.module("app", [])
+var app = angular.module("app", ['ui.bootstrap'])
+
 
 // configure the app object by adding routes
 app.config(function($routeProvider) {
@@ -23,6 +24,13 @@ app.config(function($routeProvider) {
   $routeProvider.otherwise({ redirectTo: '/choose-user-case' });
 
 });
+
+
+function CollapseDemoCtrl($scope) {
+    console.log("isCollapsed: " + $scope.isCollapsed);
+    $scope.isCollapsed = false;
+}
+
 
 
 // create a logincontroler and create a single method for it.
@@ -106,3 +114,6 @@ app.factory("ChooseUserCaseService", function() {
     }
   };
 });
+
+
+
