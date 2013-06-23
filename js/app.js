@@ -20,6 +20,11 @@ app.config(function($routeProvider) {
     controller: 'HomeController'
   });
 
+  $routeProvider.when('/page2', {
+    templateUrl: 'views/page2.html',
+    controller: 'Page2Controller'
+  });
+
   $routeProvider.otherwise({ redirectTo: '/choose-user-case' });
 
 });
@@ -87,6 +92,13 @@ app.controller("ChooseUserCaseController", function($scope, $location, DataServi
 });
 
 
+app.controller('navCtrl', ['$scope', '$location', function ($scope, $location) {
+    $scope.navClass = function (page) {
+        var currentRoute = $location.path().substring(1) || 'home';
+        return page === currentRoute ? 'active' : '';
+    };
+}]);
+
 
 // create a logincontroler and create a single method for it.
 app.controller("LoginController", function($scope, $location, AuthenticationService, DataService ) {
@@ -95,7 +107,7 @@ app.controller("LoginController", function($scope, $location, AuthenticationServ
 
   if (DataService.getData("login") == true ) {
       $location.path('/home');
-      DataService.setData("showModal", true);
+      //DataService.setData("showModal", true);
   }
 
   $scope.login = function() {
@@ -114,6 +126,20 @@ app.controller("HomeController", function($scope, AuthenticationService, DataSer
 	AuthenticationService.logout();
     }
 });
+
+
+// create page2  controller 
+app.controller("Page2Controller", function($scope, AuthenticationService, DataService ) {
+    $scope.logout = function() {
+	var d = DataService.getData();
+	console.log("saved data " + JSON.stringify(d));
+
+	AuthenticationService.logout();
+    }
+});
+
+
+
 
 
 app.factory("AuthenticationService", function($location, DataService) {

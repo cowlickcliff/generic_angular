@@ -27,11 +27,11 @@
 	</div>
 
 
+
 	<div ng-controller="CollapseDemoCtrl">
 	  <button class="btn" ng-click="isCollapsed = !isCollapsed">Toggle collapse</button>
 	  <hr>
 	  <div collapse="isCollapsed">
-
 
 	    <div ng-controller="CarouselDemoCtrl">
 	      <carousel interval="myInterval">
@@ -62,7 +62,35 @@
 	  </div>
 	</div>
 
-	
+	<!-- navigation -->
+	<div >
+	  {{CurrentPage}}
+	  <p>
+
+
+	    <div class="well sidebar-nav" ng-controller="navCtrl">
+	      <ul class="nav nav-list">
+		<li ng-class="navClass('login')"><a href='#/login'>Login</a></li>
+		<li ng-class="navClass('home')"><a href='#/home'>Home</a></li>
+		<li ng-class="navClass('page2')"><a href='#/page2'>Page 2</a></li>
+		<li ng-class="navClass('logout')"><a href='#/logout'>Logout</a></li>
+	      </ul>
+	    </div>
+
+	    <!-- <ul> -->
+	    <!--   <li><a href="#/login">Login </a></li> -->
+	    <!--   <li><a href="#/home">Home </a></li> -->
+	    <!--   <li><a href="#/page2">Page2 </a></li> -->
+	    <!--   <li><a href="#/logout">Logout </a></li> -->
+	    <!-- </ul> -->
+
+
+	  </p>
+	</div>
+
+
+
+	<!-- ng-view stuff -->
 	<div class="row">
 	  <div class="span6">
 	    <div class="well well-large" id="view" ng-view ></div>
